@@ -223,3 +223,4 @@ sudo ufw status
 sudo tail -f /var/log/ufw.log
 ```
 
+
