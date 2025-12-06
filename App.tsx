@@ -107,11 +107,7 @@ const App: React.FC = () => {
           <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex flex-col">
-                <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Logo_of_The_Daily_Star.svg" 
-                  alt="The Daily Star" 
-                  className="h-10 w-auto object-contain"
-                />
+                <span className="text-3xl font-bold font-serif text-ds-green leading-none tracking-tight">The Daily Star</span>
               </div>
               <div className="h-8 w-px bg-gray-300 hidden sm:block"></div>
               <div className="flex flex-col justify-center">

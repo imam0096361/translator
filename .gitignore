@@ -11,14 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
-
-# Environment variables
-.env
 .env.local
-.env.*.local
-
-# Cloned repository
-translation/
+.env
 
 # Editor directories and files
 .vscode/*
