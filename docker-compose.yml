@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  translator-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        GEMINI_API_KEY: ${GEMINI_API_KEY}
+    container_name: translator-ai-dailystar
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_HOST=translator-ai.dailystar.press
+      - NGINX_PORT=80
+    networks:
+      - translator-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.translator.rule=Host(`translator-ai.dailystar.press`)"
+      - "traefik.http.routers.translator.entrypoints=web"
+      - "traefik.http.services.translator.loadbalancer.server.port=80"
+
+networks:
+  translator-network:
+    driver: bridge
+
