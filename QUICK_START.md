@@ -32,8 +32,11 @@
    ```
 
 ## Access
-- Application: http://translator-ai.dailystar.press (or your server IP)
-- Health check: http://translator-ai.dailystar.press/health
+- Application: http://translator-ai.dailystar.press:9999 (or http://your-server-ip:9999)
+- Health check: http://translator-ai.dailystar.press:9999/health
+- Local access: http://localhost:9999
+
+**Note:** The app runs on port 9999 to avoid conflicts with other services. Configure firewall to allow port 9999.
 
 ## Common Commands
 

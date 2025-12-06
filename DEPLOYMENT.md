@@ -66,9 +66,39 @@ docker-compose ps
 docker-compose logs -f
 ```
 
-### 5. Configure Nginx Reverse Proxy (Optional but Recommended)
+### 5. Configure Firewall (Port 9999)
 
-If you want to use a reverse proxy with SSL, install nginx on the host:
+The application runs on port 9999 to avoid conflicts with other services on port 80.
+
+```bash
+# Allow port 9999 through firewall
+sudo ufw allow 9999/tcp
+
+# If using UFW, enable it (if not already enabled)
+sudo ufw enable
+
+# Verify firewall status
+sudo ufw status
+```
+
+**For iptables (if not using UFW):**
+```bash
+# Allow incoming connections on port 9999
+sudo iptables -A INPUT -p tcp --dport 9999 -j ACCEPT
+
+# Save iptables rules (Ubuntu)
+sudo netfilter-persistent save
+```
+
+**Port Forwarding (if behind NAT/router):**
+If your server is behind a router/NAT, configure port forwarding:
+- External/Public IP Port: 80 (or 443 for HTTPS)
+- Internal/Private IP: Your server's local IP
+- Internal Port: 9999
+
+### 6. Configure Nginx Reverse Proxy (Optional but Recommended)
+
+If you want to use a reverse proxy with SSL on port 80/443, install nginx on the host:
 
 ```bash
 sudo apt install -y nginx certbot python3-certbot-nginx
@@ -82,7 +112,7 @@ server {
     server_name translator-ai.dailystar.press;
 
     location / {
-        proxy_pass http://localhost:80;
+        proxy_pass http://localhost:9999;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -98,7 +128,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-### 6. Set Up SSL Certificate (Recommended)
+### 7. Set Up SSL Certificate (Recommended)
 
 ```bash
 sudo certbot --nginx -d translator-ai.dailystar.press
@@ -143,7 +173,8 @@ docker stats translator-ai-dailystar
 ### Container won't start
 - Check logs: `docker-compose logs translator-app`
 - Verify `.env` file exists and has `GEMINI_API_KEY`
-- Check if port 80 is available: `sudo netstat -tulpn | grep :80`
+- Check if port 9999 is available: `sudo netstat -tulpn | grep :9999`
+- Verify port 9999 is not in use: `sudo lsof -i :9999`
 
 ### API Key Issues
 - Ensure `GEMINI_API_KEY` is set in `.env` file
@@ -151,7 +182,9 @@ docker stats translator-ai-dailystar
 
 ### Domain Not Resolving
 - Verify DNS A record points to server IP
-- Check firewall allows port 80: `sudo ufw allow 80/tcp`
+- Check firewall allows port 9999: `sudo ufw allow 9999/tcp`
+- Test local access: `curl http://localhost:9999`
+- Test from external: `curl http://your-server-ip:9999`
 
 ### SSL Certificate Issues
 - Ensure domain DNS is properly configured
@@ -164,9 +197,10 @@ docker stats translator-ai-dailystar
 
 2. **Firewall**: Configure UFW or iptables to only allow necessary ports:
    ```bash
-   sudo ufw allow 22/tcp   # SSH
-   sudo ufw allow 80/tcp   # HTTP
-   sudo ufw allow 443/tcp  # HTTPS
+   sudo ufw allow 22/tcp    # SSH
+   sudo ufw allow 9999/tcp  # Translator App (or 80/443 if using reverse proxy)
+   sudo ufw allow 80/tcp    # HTTP (if using reverse proxy)
+   sudo ufw allow 443/tcp   # HTTPS (if using reverse proxy)
    sudo ufw enable
    ```
 

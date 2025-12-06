@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   translator-app:
     build:
@@ -10,7 +8,7 @@ services:
     container_name: translator-ai-dailystar
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "9999:80"
     environment:
       - NGINX_HOST=translator-ai.dailystar.press
       - NGINX_PORT=80

@@ -38,7 +38,13 @@ sleep 5
 # Check container status
 if docker-compose ps | grep -q "Up"; then
     echo "✅ Deployment successful!"
-    echo "🌐 Application should be available at: http://translator-ai.dailystar.press"
+    echo "🌐 Application should be available at:"
+    echo "   - Local: http://localhost:9999"
+    echo "   - Network: http://your-server-ip:9999"
+    echo "   - Domain: http://translator-ai.dailystar.press:9999"
+    echo ""
+    echo "⚠️  Don't forget to configure firewall:"
+    echo "   sudo ufw allow 9999/tcp"
     echo ""
     echo "View logs with: docker-compose logs -f"
     echo "Stop with: docker-compose down"
