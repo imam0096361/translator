@@ -295,6 +295,8 @@ const App: React.FC = () => {
         <footer className="bg-white border-t border-gray-200 py-6 mt-auto">
           <div className="max-w-6xl mx-auto px-4 text-center text-gray-400 text-sm font-sans">
             &copy; {new Date().getFullYear()} Daily Star Editorial Tools. Strict Confidentiality Maintained.
+            <br />
+            <span className="mt-2 block">Developed By DS IT</span>
           </div>
         </footer>
       )}
